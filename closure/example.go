@@ -2,42 +2,17 @@ package closure
 
 import "fmt"
 
+// https://www.calhoun.io/what-is-a-closure/#closuresprovidedataisolation
 func Run() {
-	example3()
+	counter := newCounter()
+	fmt.Println(counter())
+	fmt.Println(counter())
 }
 
-type add func(a int, b int) int
-
-func example() {
-	var a add = func(a, b int) int {
-		return a + b
+func newCounter() func() int {
+	i := 0
+	return func() int {
+		i += 1
+		return i
 	}
-
-	s := a(7, 7)
-	fmt.Println(s)
-}
-
-func add2(a func(a, b int) int) {
-	fmt.Println(a(27, 27))
-}
-
-func example2() {
-	f := func(a, b int) int {
-		return a + b
-	}
-
-	add2(f)
-}
-
-func add3() func(a, b int) int {
-	f := func(a, b int) int {
-		return a + b
-	}
-
-	return f
-}
-
-func example3() {
-	s := add3()
-	fmt.Println(s(27, 27))
 }
