@@ -1,14 +1,14 @@
 package main
 
 import (
-	"learn_go/closure"
 	"learn_go/difference"
 	"learn_go/goroutine"
+	"learn_go/useful_closure"
 	"time"
 )
 
 func main() {
-	closure.Run()
+	useful_closure.Run()
 }
 
 func actionGoroutine() {
