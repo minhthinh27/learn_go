@@ -1,14 +1,14 @@
 package main
 
 import (
+	"learn_go/defer_panic_recover_return"
 	"learn_go/difference"
 	"learn_go/goroutine"
-	"learn_go/useful_closure"
 	"time"
 )
 
 func main() {
-	useful_closure.Run()
+	defer_panic_recover_return.Run()
 }
 
 func actionGoroutine() {
