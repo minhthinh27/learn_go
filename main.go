@@ -1,9 +1,7 @@
 package main
 
-import (
-	"learn_go/unbuffered"
-)
+import "learn_go/buffered"
 
 func main() {
-	unbuffered.Run()
+	buffered.Run()
 }
