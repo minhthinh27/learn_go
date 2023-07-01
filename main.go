@@ -1,24 +1,34 @@
 package main
 
 import (
-	"learn_go/closure"
-	"learn_go/difference"
-	"learn_go/goroutine"
+	"context"
+	"fmt"
 	"time"
 )
 
 func main() {
-	closure.Run()
+	chlBoyA := make(chan string, 1)
+	chlBoyB := make(chan string, 1)
+	ctx := context.Background()
+
+	go play(chlBoyA, chlBoyB, ctx)
+
+	chlBoyB <- "pong"
+
+	time.Sleep(time.Millisecond)
 }
 
-func actionGoroutine() {
-	// ex
-	go goroutine.MakeASimpleCoffee()
-
-	/* Wait a cup of coffee is made*/
-	time.Sleep(time.Second * 150)
-}
-
-func actionDifference1() {
-	difference.Difference1()
+func play(chlA, chlB chan string, ctx context.Context) {
+	for {
+		select {
+		case <-chlA:
+			fmt.Println("ping")
+			chlB <- "pong"
+		case <-chlB:
+			fmt.Println("pong")
+			chlA <- "ping"
+		case <-ctx.Done():
+			return
+		}
+	}
 }
