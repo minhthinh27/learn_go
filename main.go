@@ -10,38 +10,63 @@ func main() {
 	// var nums = []int{0, 1, 4, 6, 7, 10}
 	// var diff = 3
 	//var rings = "B0B6G0R6R0R6G9"
-	var names = []string{"Alice", "Bob", "Marry"}
-	var heights = []int{155, 185, 160}
-	fmt.Println(sortPeople(names, heights))
+	// var names = []string{"Alice", "Bob", "Marry"}
+	// var heights = []int{155, 185, 160}
+	num1 := []int{1, 2, 3}
+	num2 := []int{2, 4, 6}
+	fmt.Println(findDifference(num1, num2))
 }
 
-func sortPeople(names []string, heights []int) []string {
+func findDifference(nums1 []int, nums2 []int) [][]int {
+	var result [][]int
+	mapNum1 := make(map[int]bool)
+	mapNum2 := make(map[int]bool)
 
-	mapHeight := make(map[int]string)
-
-	for i, v := range heights {
-		mapHeight[v] = names[i]
+	for _, v := range nums1 {
+		mapNum1[v] = true
 	}
 
-	start, end := 0, len(heights)-1
+	for _, v := range nums2 {
+		mapNum2[v] = true
+	}
 
-	for start < end {
-		i := start
-
-		for i < end {
-			if heights[i+1] > heights[start] {
-				heights[start], heights[i+1] = heights[i+1], heights[start]
-			}
-			i++
+	result1 := []int{}
+	for k := range mapNum1 {
+		if _, ok := mapNum2[k]; !ok {
+			result1 = append(result1, k)
 		}
-
-		start++
 	}
 
-	result := []string{}
-	for _, val := range heights {
-		result = append(result, mapHeight[val])
+	result2 := []int{}
+	for k := range mapNum2 {
+		if _, ok := mapNum1[k]; !ok {
+			result2 = append(result2, k)
+		}
 	}
+
+	result = append(result, result1, result2)
 
 	return result
 }
+
+// func findDifference(nums1 []int, nums2 []int) [][]int {
+// 	return [][]int{setDifference(nums1, nums2), setDifference(nums2, nums1)}
+// }
+
+// func setDifference(a, b []int) []int {
+// 	d := [2001]bool{}
+// 	ans := []int{}
+
+// 	for _, x := range b {
+// 		d[x+1000] = true
+// 	}
+
+// 	for _, x := range a {
+// 		if !d[x+1000] {
+// 			ans = append(ans, x)
+// 			d[x+1000] = true // prevent duplicates from being added
+// 		}
+// 	}
+
+// 	return ans
+// }
