@@ -1,34 +1,36 @@
 package main
 
 import (
-	"context"
 	"fmt"
+	"sync"
 	"time"
 )
 
 func main() {
-	chlBoyA := make(chan string, 1)
-	chlBoyB := make(chan string, 1)
-	ctx := context.Background()
 
-	go play(chlBoyA, chlBoyB, ctx)
+	eventChannel := make(chan int)
+	wg := new(sync.WaitGroup)
 
-	chlBoyB <- "pong"
+	go func() {
+		for i := 0; i <= 100; i++ {
 
-	time.Sleep(time.Millisecond)
+			wg.Add(1)
+			go action(wg, i, eventChannel)
+			wg.Wait()
+
+		}
+
+		close(eventChannel)
+	}()
+
+	for v := range eventChannel {
+		fmt.Println(v)
+	}
+
+	time.Sleep(time.Second * 3)
 }
 
-func play(chlA, chlB chan string, ctx context.Context) {
-	for {
-		select {
-		case <-chlA:
-			fmt.Println("ping")
-			chlB <- "pong"
-		case <-chlB:
-			fmt.Println("pong")
-			chlA <- "ping"
-		case <-ctx.Done():
-			return
-		}
-	}
+func action(wg *sync.WaitGroup, i int, chn chan<- int) {
+	defer wg.Done()
+	chn <- i
 }
