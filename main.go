@@ -1,30 +1,64 @@
 package main
 
+import "fmt"
+
 func main() {
-	test := []byte{'h', 'e', 'l', 'l', 'o'}
-	reverseString(test)
-	// fmt.Println(reverseString(test))
+	test := []int{2, 2, 2, 1, 1, 2}
+	sortColors(test)
+	// fmt.Println(sortColors(test))
 }
 
-func reverseString(s []byte) {
-	start, end := 0, len(s)-1
+// func sortColors(nums []int) {
+// 	mapColor := make(map[int]int, len(nums))
 
-	for start < end {
-		s[start], s[end] = s[end], s[start]
-		start++
-		end--
-	}
-}
+// 	for _, v := range nums {
+// 		mapColor[v]++
+// 	}
 
-// func reverseString(s []byte)  {
+// 	fmt.Println(mapColor)
 
-//     size := len(s)
+// 	// red: 0 , white: 1 , blue: 2
+// 	nameColor := 0
+// 	i := 0
+// 	for i < len(nums) {
+// 		value, ok := mapColor[nameColor]
+// 		if !ok || value == 0 {
+// 			nameColor++
+// 		} else if value > 0 {
+// 			nums[i] = nameColor
+// 			mapColor[nameColor] = value - 1
+// 			i++
+// 		}
+// 	}
 
-//     // reverse string by mirror image
-//     for i := 0 ; i < size/2 ; i++{
-//         s[i], s[size-1-i] = s[size-1-i], s[i]
-//     }
+// 	// for i, _ := range nums {
+// 	// 	if value, ok := mapColor[nameColor]; ok && value > 0 {
+// 	// 		mapColor[nameColor]--
+// 	// 		nums[i] = nameColor
+// 	// 	} else {
+// 	// 		nameColor += 1
+// 	// 	}
+// 	// }
 
-//     return
-
+// 	fmt.Println(nums)
 // }
+
+func sortColors(nums []int) {
+	if len(nums) <= 1 {
+		return
+	}
+	var start, end = 0, len(nums) - 1
+	for i := 0; i <= end; i++ {
+		// swap current to end
+		if nums[i] == 2 {
+			nums[end], nums[i] = nums[i], nums[end]
+			end--
+			i--
+		} else if nums[i] == 0 {
+			nums[start], nums[i] = nums[i], nums[start]
+			start++
+		}
+	}
+
+	fmt.Println(nums)
+}
