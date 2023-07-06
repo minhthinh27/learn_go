@@ -1,39 +1,30 @@
 package main
 
-import "fmt"
-
 func main() {
-	test := []int{4, 2, 5, 7}
-	fmt.Println(sortArrayByParityII(test))
+	test := []byte{'h', 'e', 'l', 'l', 'o'}
+	reverseString(test)
+	// fmt.Println(reverseString(test))
 }
 
-func sortArrayByParityII(nums []int) []int {
-	evenIndex, oddIndex := 0, 1
+func reverseString(s []byte) {
+	start, end := 0, len(s)-1
 
-	result := make([]int, len(nums))
-
-	for _, v := range nums {
-		if v%2 == 0 {
-			result[evenIndex] = v
-			evenIndex += 2
-		} else {
-			result[oddIndex] = v
-			oddIndex += 2
-		}
+	for start < end {
+		s[start], s[end] = s[end], s[start]
+		start++
+		end--
 	}
-
-	return result
 }
 
-// func sortArrayByParityII(A []int) []int {
-// 	even, odd := 0, 1
-// 	for even < len(A) && odd < len(A) {
-// 		if A[even]%2 != 0 {
-// 			A[even], A[odd] = A[odd], A[even]
-// 			odd += 2
-// 		} else {
-// 			even += 2
-// 		}
-// 	}
-// 	return A
+// func reverseString(s []byte)  {
+
+//     size := len(s)
+
+//     // reverse string by mirror image
+//     for i := 0 ; i < size/2 ; i++{
+//         s[i], s[size-1-i] = s[size-1-i], s[i]
+//     }
+
+//     return
+
 // }
