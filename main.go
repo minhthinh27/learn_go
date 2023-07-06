@@ -1,36 +1,39 @@
 package main
 
-import (
-	"fmt"
-	"sync"
-	"time"
-)
+import "fmt"
 
 func main() {
+	test := []int{4, 2, 5, 7}
+	fmt.Println(sortArrayByParityII(test))
+}
 
-	eventChannel := make(chan int)
-	wg := new(sync.WaitGroup)
+func sortArrayByParityII(nums []int) []int {
+	evenIndex, oddIndex := 0, 1
 
-	go func() {
-		for i := 0; i <= 100; i++ {
+	result := make([]int, len(nums))
 
-			wg.Add(1)
-			go action(wg, i, eventChannel)
-			wg.Wait()
-
+	for _, v := range nums {
+		if v%2 == 0 {
+			result[evenIndex] = v
+			evenIndex += 2
+		} else {
+			result[oddIndex] = v
+			oddIndex += 2
 		}
-
-		close(eventChannel)
-	}()
-
-	for v := range eventChannel {
-		fmt.Println(v)
 	}
 
-	time.Sleep(time.Second * 3)
+	return result
 }
 
-func action(wg *sync.WaitGroup, i int, chn chan<- int) {
-	defer wg.Done()
-	chn <- i
-}
+// func sortArrayByParityII(A []int) []int {
+// 	even, odd := 0, 1
+// 	for even < len(A) && odd < len(A) {
+// 		if A[even]%2 != 0 {
+// 			A[even], A[odd] = A[odd], A[even]
+// 			odd += 2
+// 		} else {
+// 			even += 2
+// 		}
+// 	}
+// 	return A
+// }
