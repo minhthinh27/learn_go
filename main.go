@@ -2,35 +2,34 @@ package main
 
 import (
 	"fmt"
-	"sync"
-	"time"
+	"strconv"
 )
 
 func main() {
+	var nums = []int{0, 1, 2, 4, 5, 7}
 
-	eventChannel := make(chan int)
-	wg := new(sync.WaitGroup)
-
-	go func() {
-		for i := 0; i <= 100; i++ {
-
-			wg.Add(1)
-			go action(wg, i, eventChannel)
-			wg.Wait()
-
-		}
-
-		close(eventChannel)
-	}()
-
-	for v := range eventChannel {
-		fmt.Println(v)
-	}
-
-	time.Sleep(time.Second * 3)
+	fmt.Println(summaryRanges(nums))
 }
 
-func action(wg *sync.WaitGroup, i int, chn chan<- int) {
-	defer wg.Done()
-	chn <- i
+func summaryRanges(nums []int) []string {
+	result := []string{}
+	temp := ""
+
+	for i := 0; i < len(nums); {
+		temp += strconv.Itoa(nums[i])
+
+		j := i + 1
+		for ; j < len(nums) && nums[j]-nums[j-1] == 1; j++ {
+		}
+
+		if j-1 > i {
+			temp = temp + "->" + strconv.Itoa(nums[j-1])
+		}
+
+		result = append(result, temp)
+		temp = ""
+		i = j
+	}
+
+	return result
 }
