@@ -1,35 +1,27 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func main() {
-	test := []int{1, 8, 6, 2, 5, 4, 8, 3, 7}
-	//sortColors(test)
-	fmt.Println(maxArea(test))
+	var nums = []int{3, 2, 3}
+
+	fmt.Println(majorityElement(nums))
 }
 
-func maxArea(height []int) int {
-	i, j := 0, len(height)-1
-	length := len(height) - 1
-	res := 0
+func majorityElement(nums []int) int {
+	if len(nums) == 1 {
+		return nums[0]
+	}
 
-	for i != j {
-		temp := 0
-		if height[i] < height[j] {
-			temp = height[i] * length
-			i++
-		} else {
-			temp = height[j] * length
-			j--
-		}
-
-		length--
-
-		if temp > res {
-			res = temp
+	mapArr := make(map[int]int)
+	for _, v := range nums {
+		mapArr[v]++
+		if mapArr[v] > (len(nums) / 2) {
+			return v
 		}
 	}
 
-	return res
-
+	return 0
 }
