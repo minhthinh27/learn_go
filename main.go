@@ -1,35 +1,35 @@
 package main
 
-import (
-	"fmt"
-	"strconv"
-)
+import "fmt"
 
 func main() {
-	var nums = []int{0, 1, 2, 4, 5, 7}
-
-	fmt.Println(summaryRanges(nums))
+	test := []int{1, 8, 6, 2, 5, 4, 8, 3, 7}
+	//sortColors(test)
+	fmt.Println(maxArea(test))
 }
 
-func summaryRanges(nums []int) []string {
-	result := []string{}
-	temp := ""
+func maxArea(height []int) int {
+	i, j := 0, len(height)-1
+	length := len(height) - 1
+	res := 0
 
-	for i := 0; i < len(nums); {
-		temp += strconv.Itoa(nums[i])
-
-		j := i + 1
-		for ; j < len(nums) && nums[j]-nums[j-1] == 1; j++ {
+	for i != j {
+		temp := 0
+		if height[i] < height[j] {
+			temp = height[i] * length
+			i++
+		} else {
+			temp = height[j] * length
+			j--
 		}
 
-		if j-1 > i {
-			temp = temp + "->" + strconv.Itoa(nums[j-1])
-		}
+		length--
 
-		result = append(result, temp)
-		temp = ""
-		i = j
+		if temp > res {
+			res = temp
+		}
 	}
 
-	return result
+	return res
+
 }
