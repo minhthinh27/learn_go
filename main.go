@@ -5,29 +5,36 @@ import (
 )
 
 func main() {
-	var nums = 746627324245
+	//var nums = 746627324245
 
-	fmt.Println(isHappy(nums))
+	fmt.Println(isIsomorphic("egg", "add"))
 }
 
-func isHappy(n int) bool {
-	switch n {
-	case 1, 7:
-		return true
-	case 2, 3, 4, 5, 6, 8, 9:
+func isIsomorphic(s string, t string) bool {
+	if len(s) != len(t) {
 		return false
-	default:
-		return isHappy(caculateSum(n))
-	}
-}
-
-func caculateSum(n int) int {
-	sum := 0
-	for n > 0 {
-		digit := n % 10
-		sum += digit * digit
-		n /= 10
 	}
 
-	return sum
+	mapS := make(map[byte]byte)
+	mapT := make(map[byte]byte)
+
+	for i := range s {
+		valS, okS := mapS[s[i]]
+		valT, okT := mapT[t[i]]
+
+		if !okS && !okT {
+			mapS[s[i]] = t[i]
+			mapT[t[i]] = s[i]
+		} else if okS {
+			if valS != t[i] {
+				return false
+			}
+		} else if okT {
+			if valT != s[i] {
+				return false
+			}
+		}
+	}
+
+	return true
 }
