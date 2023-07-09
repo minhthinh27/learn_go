@@ -5,23 +5,29 @@ import (
 )
 
 func main() {
-	var nums = []int{3, 2, 3}
+	var nums = 746627324245
 
-	fmt.Println(majorityElement(nums))
+	fmt.Println(isHappy(nums))
 }
 
-func majorityElement(nums []int) int {
-	if len(nums) == 1 {
-		return nums[0]
+func isHappy(n int) bool {
+	switch n {
+	case 1, 7:
+		return true
+	case 2, 3, 4, 5, 6, 8, 9:
+		return false
+	default:
+		return isHappy(caculateSum(n))
+	}
+}
+
+func caculateSum(n int) int {
+	sum := 0
+	for n > 0 {
+		digit := n % 10
+		sum += digit * digit
+		n /= 10
 	}
 
-	mapArr := make(map[int]int)
-	for _, v := range nums {
-		mapArr[v]++
-		if mapArr[v] > (len(nums) / 2) {
-			return v
-		}
-	}
-
-	return 0
+	return sum
 }
