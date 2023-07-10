@@ -5,18 +5,24 @@ import (
 )
 
 func main() {
-	var nums = []int{1, 2, 3, 1, 1, 3}
+	var nums = []int{1, 3}
+	var k = 3
 
-	fmt.Println(numIdenticalPairs(nums))
+	fmt.Println(countKDifference(nums, k))
 }
 
-func numIdenticalPairs(nums []int) int {
+func countKDifference(nums []int, k int) int {
+	mapNums := make(map[int]int)
 	result := 0
-	mapNum := make(map[int]int)
 
 	for _, v := range nums {
-		result += mapNum[v]
-		mapNum[v]++
+		mapNums[v]++
+	}
+
+	for _, v := range nums {
+		if val, ok := mapNums[v-k]; ok {
+			result += val
+		}
 	}
 
 	return result
