@@ -5,36 +5,19 @@ import (
 )
 
 func main() {
-	//var nums = 746627324245
+	var nums = []int{1, 2, 3, 1, 1, 3}
 
-	fmt.Println(isIsomorphic("egg", "add"))
+	fmt.Println(numIdenticalPairs(nums))
 }
 
-func isIsomorphic(s string, t string) bool {
-	if len(s) != len(t) {
-		return false
+func numIdenticalPairs(nums []int) int {
+	result := 0
+	mapNum := make(map[int]int)
+
+	for _, v := range nums {
+		result += mapNum[v]
+		mapNum[v]++
 	}
 
-	mapS := make(map[byte]byte)
-	mapT := make(map[byte]byte)
-
-	for i := range s {
-		valS, okS := mapS[s[i]]
-		valT, okT := mapT[t[i]]
-
-		if !okS && !okT {
-			mapS[s[i]] = t[i]
-			mapT[t[i]] = s[i]
-		} else if okS {
-			if valS != t[i] {
-				return false
-			}
-		} else if okT {
-			if valT != s[i] {
-				return false
-			}
-		}
-	}
-
-	return true
+	return result
 }
