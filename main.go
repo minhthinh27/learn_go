@@ -5,23 +5,27 @@ import (
 )
 
 func main() {
-	var nums = []int{1, 3}
-	var k = 3
+	var allowed = "abc"
+	var words = []string{"a", "b", "c", "ab", "ac", "bc", "abc"}
 
-	fmt.Println(countKDifference(nums, k))
+	fmt.Println(countConsistentStrings(allowed, words))
 }
 
-func countKDifference(nums []int, k int) int {
-	mapNums := make(map[int]int)
-	result := 0
+func countConsistentStrings(allowed string, words []string) int {
+	mapAllowed := make(map[rune]interface{})
 
-	for _, v := range nums {
-		mapNums[v]++
+	for _, v := range allowed {
+		mapAllowed[v] = struct{}{}
 	}
 
-	for _, v := range nums {
-		if val, ok := mapNums[v-k]; ok {
-			result += val
+	result := len(words)
+
+	for _, word := range words {
+		for _, char := range word {
+			if _, ok := mapAllowed[char]; !ok {
+				result--
+				break
+			}
 		}
 	}
 
