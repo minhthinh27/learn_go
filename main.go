@@ -5,27 +5,37 @@ import (
 )
 
 func main() {
-	var allowed = "abc"
-	var words = []string{"a", "b", "c", "ab", "ac", "bc", "abc"}
-
-	fmt.Println(countConsistentStrings(allowed, words))
+	// var allowed = "abc"
+	// var words = []string{"a", "b", "c", "ab", "ac", "bc", "abc"}
+	var nums = []int{0, 1, 4, 6, 7, 10}
+	var diff = 3
+	fmt.Println(arithmeticTriplets(nums, diff))
 }
 
-func countConsistentStrings(allowed string, words []string) int {
-	mapAllowed := make(map[rune]interface{})
+func arithmeticTriplets(nums []int, diff int) int {
+	result := 0
+	mapNums := make(map[int]int, len(nums))
 
-	for _, v := range allowed {
-		mapAllowed[v] = struct{}{}
+	for i, v := range nums {
+		mapNums[v] = i
 	}
 
-	result := len(words)
+	i, j := 0, 1
 
-	for _, word := range words {
-		for _, char := range word {
-			if _, ok := mapAllowed[char]; !ok {
-				result--
-				break
+	for j < len(nums) {
+		if nums[j]-nums[i] == diff {
+			if _, ok := mapNums[diff+nums[j]]; ok {
+				result++
 			}
+			i++
+		}
+
+		if nums[j]-nums[i] > diff {
+			i++
+		}
+
+		if nums[j]-nums[i] < diff {
+			j++
 		}
 	}
 
