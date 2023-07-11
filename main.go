@@ -5,46 +5,46 @@ import (
 )
 
 func main() {
-	var key = "the quick brown fox jumps over the lazy dog"
-	var message = "vkbs bs t suepuv"
+	// var key = "the quick brown fox jumps over the lazy dog"
+	// var message = "vkbs bs t suepuv"
 	// var nums = []int{0, 1, 4, 6, 7, 10}
 	// var diff = 3
-	fmt.Println(decodeMessage(key, message))
+	var words = []string{"cd", "ac", "dc", "ca", "zz"}
+	fmt.Println(maximumNumberOfStringPairs(words))
 }
 
-func decodeMessage(key string, message string) string {
-	mapLetters := make(map[rune]rune, 26)
-	result := []rune{}
+func maximumNumberOfStringPairs(words []string) int {
+	mapWords := make(map[string]bool)
+	result := 0
+	for _, str := range words {
+		temp := reverseString(str)
 
-	var charater rune = 0
-	for _, v := range key {
-		if _, ok := mapLetters[v]; !ok && v != 32 {
-			mapLetters[v] = 'a' + charater
-			charater++
-		}
-	}
-
-	for _, v := range message {
-		text := mapLetters[v]
-		if v == 32 {
-			result = append(result, 32)
+		if _, ok := mapWords[temp]; !ok {
+			mapWords[str] = true
 		} else {
-			result = append(result, text)
+			result++
 		}
 	}
 
-	return string(result)
-	// table := map[rune]byte{' ': ' '}
-	// for _, c := range key {
-	// 	if _, ok := table[c]; !ok {
-	// 		table[c] = byte(len(table) - 1 + 'a')
+	return result
+	// res := 0
+	// h := make(map[string]bool)
+	// for _, w := range words {
+	// 	if r := fmt.Sprintf("%c%c", w[1], w[0]); h[r] {
+	// 		res++
+	// 	} else {
+	// 		h[w] = true
 	// 	}
 	// }
+	// return res
+}
 
-	// var buffer bytes.Buffer
-	// for _, c := range message {
-	// 	buffer.WriteByte(table[c])
-	// }
+func reverseString(value string) string {
+	runes := []rune(value)
 
-	// return buffer.String()
+	for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
+		runes[i], runes[j] = runes[j], runes[i]
+	}
+
+	return string(runes)
 }
