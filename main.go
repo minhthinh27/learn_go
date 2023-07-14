@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"runtime"
+	"sync"
 	"time"
 )
 
@@ -16,7 +17,7 @@ func main() {
 	//var words = []string{"cd", "ac", "dc", "ca", "zz"}
 	//fmt.Println(countPoints(rings))
 	//waitForResult()
-
+	drop()
 }
 
 func waitForResult() {
@@ -33,7 +34,6 @@ func waitForResult() {
 	fmt.Printf("parent reciver data: %s", d)
 
 	time.Sleep(time.Second * 3)
-
 }
 
 func fanOut() {
@@ -76,7 +76,7 @@ func waitForTask() {
 func pooling() {
 	ch := make(chan string)
 
-	g := runtime.GOMAXPROCS(3)
+	g := runtime.GOMAXPROCS(0)
 	for c := 0; c < g; c++ {
 		go func(child int) {
 			for d := range ch {
@@ -123,6 +123,63 @@ func fanOutSem() {
 		fmt.Println("parent revicer singal of children: ", children)
 		children--
 	}
+
+	time.Sleep(time.Second)
+}
+
+func boundedWorkPooling() {
+	work := []string{"paper", "paper", "paper", "paper", 20: "paper"}
+
+	g := runtime.GOMAXPROCS(0)
+	var wg sync.WaitGroup
+	wg.Add(g)
+
+	ch := make(chan string, g)
+
+	for c := 0; c < g; c++ {
+		go func(child int) {
+			defer wg.Done()
+			for wrk := range ch {
+				fmt.Printf("child %d : recv'd signal : %s\n", child, wrk)
+			}
+
+			fmt.Printf("child %d : recv'd shutdown signal\n", child)
+		}(c)
+	}
+
+	for _, wrk := range work {
+		ch <- wrk
+	}
+	close(ch)
+	wg.Wait()
+
+	time.Sleep(time.Second)
+}
+
+func drop() {
+	const cap = 100
+
+	ch := make(chan string, cap)
+
+	go func() {
+		for p := range ch {
+			fmt.Println("child : recv'd signal :", p)
+		}
+	}()
+
+	works := 1000
+	for i := 0; i < works; i++ {
+		select {
+		case ch <- "data":
+			fmt.Println("parent : sent signal :", i)
+		default:
+			fmt.Println("parent : dropped data :", i)
+		}
+
+	}
+
+	close(ch)
+	fmt.Println("parent : sent shutdown signal")
 
 	time.Sleep(time.Second)
 }
