@@ -1,8 +1,7 @@
-package goroutine
+package main
 
 import (
 	"fmt"
-	"runtime"
 	"sync"
 	"time"
 )
@@ -32,7 +31,7 @@ func MakeASimpleCoffee() {
 	go func() {
 		defer wg.Done()
 		BoilingWaterJob(time.Second * 60)
-		runtime.Gosched()
+		//runtime.Gosched()
 	}()
 
 	go func() {
