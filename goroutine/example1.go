@@ -1,4 +1,4 @@
-package main
+package goroutine
 
 import (
 	"fmt"
@@ -10,7 +10,7 @@ func init() {
 	runtime.GOMAXPROCS(1)
 }
 
-func main() {
+func Example1() {
 	var wg sync.WaitGroup
 
 	wg.Add(2)
