@@ -5,5 +5,5 @@ import (
 )
 
 func main() {
-	excersie.GamePingPong()
+	excersie.FanOutSem()
 }

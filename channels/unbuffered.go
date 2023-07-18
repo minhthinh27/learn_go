@@ -31,14 +31,17 @@ func Unbuffered1() {
 		fmt.Println("channel send data")
 		ch <- 10
 		a = "ok"
+		fmt.Println("channel sended data")
 	}()
 
-	fmt.Println("channel reciver data")
 	time.Sleep(time.Second * 3)
+	fmt.Println("channel received data")
 	<-ch
 
 	fmt.Println("continued processing")
 	fmt.Println(a)
+
+	time.Sleep(time.Second * 2)
 }
 
 func Unbuffered2() {
