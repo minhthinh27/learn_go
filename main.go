@@ -1,9 +1,7 @@
 package main
 
-import (
-	"learn_go/excersie"
-)
+import "learn_go/excersie"
 
 func main() {
-	excersie.FanOutSem()
+	excersie.Start()
 }

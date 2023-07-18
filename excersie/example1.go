@@ -88,6 +88,7 @@ func Pooling() {
 	time.Sleep(time.Second)
 }
 
+//  a semaphore is added to the fan out pattern to restrict the number of child goroutines that can be schedule to run.
 func FanOutSem() {
 	children := 50
 	ch := make(chan string, children)
@@ -117,4 +118,45 @@ func FanOutSem() {
 	}
 
 	time.Sleep(time.Second)
+}
+
+// crawlURL
+const (
+	numberOfURLs    = 10000
+	numberOfWorkers = 5
+)
+
+func crawlURL(queue <-chan int, name string) {
+	for v := range queue {
+		fmt.Printf("Worker %s is crawling URL %d\n", name, v)
+		time.Sleep(time.Second)
+	}
+
+	fmt.Printf("Worker %s done and exit\n", name)
+}
+
+func startQueue() <-chan int {
+	queue := make(chan int, 100)
+
+	go func() {
+		for i := 1; i <= numberOfURLs; i++ {
+			queue <- i
+			fmt.Println("getURL")
+			fmt.Printf("URL %d has been enqueued\n", i)
+		}
+
+		close(queue)
+	}()
+
+	return queue
+}
+
+func Start() {
+	queue := startQueue()
+
+	for i := 1; i <= numberOfWorkers; i++ {
+		go crawlURL(queue, fmt.Sprintf("%d", i))
+	}
+
+	time.Sleep(time.Minute * 5)
 }
