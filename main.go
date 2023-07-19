@@ -3,5 +3,5 @@ package main
 import "learn_go/excersie"
 
 func main() {
-	excersie.Start()
+	excersie.Cancellation()
 }

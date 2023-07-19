@@ -1,9 +1,11 @@
 package excersie
 
 import (
+	"context"
 	"fmt"
 	"math/rand"
 	"runtime"
+	"sync"
 	"time"
 )
 
@@ -13,13 +15,14 @@ func WaitForResult() {
 
 	go func() {
 		time.Sleep(time.Duration(rand.Intn(500)) * time.Millisecond)
-		ch <- 10
 		fmt.Println("child : sent signal")
+		ch <- 10
+		//fmt.Println("child : sent signal")
 	}()
 
 	m := <-ch
 	fmt.Println("parent : recv'd signal :", m)
-
+	fmt.Println("ok")
 	time.Sleep(time.Second)
 }
 
@@ -56,9 +59,11 @@ func WaitForTask() {
 	}()
 
 	time.Sleep(time.Duration(rand.Intn(500)) * time.Millisecond)
-	fmt.Println("parent : sent signal")
+	//fmt.Println("parent : sent signal")
 	ch <- "data"
+	fmt.Println("parent : sent signal")
 
+	fmt.Println("ok")
 	time.Sleep(time.Second)
 }
 
@@ -159,4 +164,96 @@ func Start() {
 	}
 
 	time.Sleep(time.Minute * 5)
+}
+
+// boundedWorkPooling: In this pattern, a pool of child goroutines is created
+// to service a fixed amount of work. The parent goroutine iterates over all
+// work, signalling that into the pool. Once all the work has been signaled,
+// then the channel is closed, the channel is flushed, and the child
+// goroutines terminate.
+func BoundedWorkPooling() {
+	works := []string{"paper", "paper", "paper", "paper", 2000: "paper"}
+
+	g := runtime.GOMAXPROCS(0)
+	var wg sync.WaitGroup
+
+	wg.Add(g)
+
+	ch := make(chan string, g)
+
+	for i := 0; i < g; i++ {
+		go func(child int) {
+			defer wg.Done()
+			for wrk := range ch {
+				fmt.Printf("child %d : recv'd signal : %s\n", child, wrk)
+			}
+			fmt.Printf("child %d : recv'd shutdown signal\n", child)
+
+		}(i)
+	}
+
+	for _, work := range works {
+		ch <- work
+	}
+	close(ch)
+
+	wg.Wait()
+
+	time.Sleep(time.Second)
+	fmt.Println("-------------------------------------------------")
+}
+
+// drop: In this pattern, the parent goroutine signals 2000 pieces of work to
+// a single child goroutine that can't handle all the work. If the parent
+// performs a send and the child is not ready, that work is discarded and dropped.
+func Drop() {
+	work := 2000
+	ch := make(chan string, 100)
+
+	go func() {
+		for m := range ch {
+			fmt.Println("child : recv'd signal :", m)
+		}
+	}()
+
+	for i := 0; i < work; i++ {
+		select {
+		case ch <- "data":
+			fmt.Println("parent : sent signal :", i)
+		default:
+			fmt.Println("parent : dropped data :", i)
+
+		}
+	}
+	close(ch)
+
+	fmt.Println("parent : sent shutdown signal")
+
+	time.Sleep(time.Second)
+	fmt.Println("-------------------------------------------------")
+}
+
+// cancellation: In this pattern, the parent goroutine creates a child
+// goroutine to perform some work. The parent goroutine is only willing to
+// wait 150 milliseconds for that work to be completed. After 150 milliseconds
+// the parent goroutine walks away.
+func Cancellation() {
+	ctx, cancel := context.WithTimeout(context.Background(), 150*time.Millisecond)
+	defer cancel()
+	ch := make(chan string, 1)
+
+	go func() {
+		time.Sleep(time.Duration(rand.Intn(200)) * time.Millisecond)
+		ch <- "data"
+	}()
+
+	select {
+	case m := <-ch:
+		fmt.Println("work complete", m)
+	case <-ctx.Done():
+		fmt.Println("work cancelled")
+	}
+
+	time.Sleep(time.Second)
+	fmt.Println("-------------------------------------------------")
 }
