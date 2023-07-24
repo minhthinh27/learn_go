@@ -64,3 +64,19 @@ func SumOfUnique(nums []int) int {
 
 	return result
 }
+
+func RepeatedNTimes(nums []int) int {
+	mapNums := make(map[int]int)
+
+	for _, v := range nums {
+		mapNums[v]++
+	}
+
+	for k, v := range mapNums {
+		if v > 1 {
+			return k
+		}
+	}
+
+	return 0
+}
