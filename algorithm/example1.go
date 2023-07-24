@@ -47,3 +47,20 @@ func AreOccurrencesEqual(s string) bool {
 
 	return true
 }
+
+func SumOfUnique(nums []int) int {
+	result := 0
+	mapNums := make(map[int]int)
+
+	for _, v := range nums {
+		mapNums[v]++
+	}
+
+	for k, v := range mapNums {
+		if v == 1 {
+			result += k
+		}
+	}
+
+	return result
+}
