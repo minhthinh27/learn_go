@@ -1,6 +1,6 @@
 package algorithm
 
-func findDifference(nums1 []int, nums2 []int) [][]int {
+func FindDifference(nums1 []int, nums2 []int) [][]int {
 	var result [][]int
 	mapNum1 := make(map[int]bool)
 	mapNum2 := make(map[int]bool)
@@ -30,4 +30,20 @@ func findDifference(nums1 []int, nums2 []int) [][]int {
 	result = append(result, result1, result2)
 
 	return result
+}
+
+func AreOccurrencesEqual(s string) bool {
+	mapS := make(map[rune]int)
+
+	for _, v := range s {
+		mapS[v]++
+	}
+
+	for _, v := range mapS {
+		if v != len(s)/len(mapS) {
+			return false
+		}
+	}
+
+	return true
 }
