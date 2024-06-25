@@ -2,38 +2,38 @@ package goroutine
 
 import (
 	"fmt"
-	"runtime"
 	"sync"
 )
 
+var (
+	mutex   sync.Mutex
+	balance int
+)
+
 func init() {
-	runtime.GOMAXPROCS(1)
+	balance = 100
+}
+
+func deposit(val int, wg *sync.WaitGroup) {
+	mutex.Lock()
+	balance += val
+	mutex.Unlock()
+	wg.Done()
+}
+
+func withdraw(val int, wg *sync.WaitGroup) {
+	mutex.Lock()
+	balance -= val
+	mutex.Unlock()
+	wg.Done()
 }
 
 func Example5() {
 	var wg sync.WaitGroup
-
-	wg.Add(2)
-
-	go func() {
-		defer wg.Done()
-		for i := 0; i < 3; i++ {
-			for j := 'a'; j < 'z'; j++ {
-				fmt.Printf("%c", j)
-			}
-		}
-	}()
-
-	go func() {
-		defer wg.Done()
-		for i := 0; i < 3; i++ {
-			for j := 'A'; j < 'Z'; j++ {
-				fmt.Printf("%c", j)
-			}
-		}
-	}()
-
+	wg.Add(3)
+	go deposit(20, &wg)
+	go withdraw(80, &wg)
+	go deposit(40, &wg)
 	wg.Wait()
-
-	fmt.Println("Completely")
+	fmt.Printf("balance is: %d\n", balance)
 }
