@@ -10,7 +10,7 @@ func init() {
 	runtime.GOMAXPROCS(1)
 }
 
-func Example1() {
+func Example5() {
 	var wg sync.WaitGroup
 
 	wg.Add(2)
