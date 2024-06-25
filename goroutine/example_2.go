@@ -19,7 +19,7 @@ func Example2() {
 
 	go func(str string) {
 		defer wg.Done()
-		for i := 0; i < 50000; i++ {
+		for i := 0; i < 10; i++ {
 			num := strconv.Itoa(i)
 			sum := sha1.Sum([]byte(num))
 
@@ -29,7 +29,7 @@ func Example2() {
 
 	go func(str string) {
 		defer wg.Done()
-		for i := 0; i < 50000; i++ {
+		for i := 0; i < 10; i++ {
 			num := strconv.Itoa(i)
 			sum := sha1.Sum([]byte(num))
 

@@ -1,32 +1,22 @@
 package goroutine
 
-import (
-	"fmt"
-	"sync"
-)
+import "fmt"
 
-func Example4() {
-	var wg sync.WaitGroup
-
-	wg.Add(2)
-
+func Example3() {
+	c := make(chan string)
 	go func() {
-		defer wg.Done()
+		c <- "tga"
+	}()
+	get := <-c
+	fmt.Println(get)
+}
 
-		for i := 100; i >= 0; i-- {
-			fmt.Println("100 -> 0", i)
-		}
+func Example3V2() {
+	c := make(chan string)
+	go func() {
+		get := <-c
+		fmt.Println(get)
 	}()
 
-	go func() {
-		defer wg.Done()
-
-		for i := 0; i <= 100; i++ {
-			fmt.Println("1 -> 100", i)
-		}
-	}()
-
-	wg.Wait()
-
-	fmt.Println("Ending")
+	c <- "tga_v2"
 }
