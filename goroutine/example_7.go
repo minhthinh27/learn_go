@@ -2,7 +2,6 @@ package goroutine
 
 import (
 	"fmt"
-	"time"
 )
 
 func Example7() {
@@ -11,7 +10,6 @@ func Example7() {
 	go func() {
 		for i := 0; i < 10; i++ {
 			myChan <- i
-			time.Sleep(time.Second)
 		}
 	}()
 
