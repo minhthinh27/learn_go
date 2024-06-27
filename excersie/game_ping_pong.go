@@ -30,7 +30,6 @@ func GamePingPong() {
 		}
 	}(boyA, boyB)
 
-	time.Sleep(time.Second * 1)
 	boyB <- "pong"
 
 	// for no limit
