@@ -12,8 +12,5 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Build and restart
-    - uses: actions/checkout@v4
-
     - name: Build
       run: echo ${{ vars.REPO_PATH }}
