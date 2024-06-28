@@ -1,8 +1,8 @@
-package goroutine
+package unbuffered
 
 import "fmt"
 
-func Example8() {
+func Example3() {
 	myChan := make(chan int)
 
 	go receiveAndSend(myChan)
