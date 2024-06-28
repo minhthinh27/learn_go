@@ -6,11 +6,23 @@ on:
 
 env:
   REPO_PATH: ${{ vars.REPO_PATH }}
+  SERVICE_NAME: ${{ vars.SERVICE_NAME }}
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Build
-      run: echo $REPO_PATH
+      - name: Build and Deploy
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          envs: REPO_PATH,SERVICE_NAME
+          script_stop: true
+          script: |
+            cd $REPO_PATH
+            git pull --quiet
+            /usr/local/go/bin/go build -tags=jsoniter -tags=nomsgpack main.go
+            sudo supervisorctl restart $SERVICE_NAME
