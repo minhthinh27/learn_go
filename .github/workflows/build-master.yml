@@ -13,4 +13,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Build
-      run: echo ${{ vars.REPO_PATH }}
+      run: echo $REPO_PATH
